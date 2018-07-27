@@ -1,0 +1,7 @@
+[package]
+name = "rust-snippets"
+version = "0.1.0"
+authors = ["sunao <sunaok.suoe@gmail.com>"]
+
+[dependencies]
+cargo-snippet = "0.2"
