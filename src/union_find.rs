@@ -17,7 +17,8 @@ impl UnionFind {
         if self.par[x] == x {
             x
         } else {
-            self.par[x] = self.root(self.par[x]);
+            let par = self.par[x];
+            self.par[x] = self.root(par);
             self.par[x]
         }
     }
@@ -28,10 +29,43 @@ impl UnionFind {
         if x == y {
             return false;
         }
-        if size[x] > size[y] {
-            par[y] = x;
+        if self.size[x] > self.size[y] {
+            self.par[y] = x;
         } else {
-            par[x] = y;
+            self.par[x] = y;
+        }
+        true
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use template::Scanner;
+    use util;
+
+    #[test]
+    fn dsl_1_a() {
+        let s = util::read_from_directory("./testcases/DSL_1_A/in");
+        let mut cin = Scanner::new(&s);
+        let s = util::read_from_directory("./testcases/DSL_1_A/out");
+        let mut cout = Scanner::new(&s);
+
+        while let Some(n) = cin.iter.next() {
+            let n: usize = n.parse().ok().expect("parsing failed");
+            let q: usize = cin.read();
+            let queries: Vec<(usize, usize, usize)> =
+                (0..q).map(|_| (cin.read(), cin.read(), cin.read())).collect();
+            let mut uf = UnionFind::new(n);
+
+            for query in queries {
+                if query.0 == 0 {
+                    uf.merge(query.1, query.2);
+                } else {
+                    let res = if uf.root(query.1) == uf.root(query.2) {1} else {0};
+                    assert_eq!(res, cout.read())
+                }
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 #![feature(plugin)]
-#![plugin(cargo-snippet)]
+#![plugin(cargo_snippet)]
 
 pub mod union_find;
 pub mod template;
+pub mod util;
