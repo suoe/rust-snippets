@@ -1,5 +1,6 @@
 #[snippet = "template"]
 use std::io::Read;
+use std;
 
 #[snippet = "template"]
 fn main() {
@@ -8,40 +9,34 @@ fn main() {
         std::io::stdin().read_to_string(&mut s).unwrap();
         s
     };
-    let out = solve(buf);
-    println!("{}", out);
+    let mut sc = Scanner::new(&buf);
 }
 
 #[snippet = "template"]
-fn solve(buf: String) -> String {
-    let mut sc = io::Scanner::new(&buf);
+use std::str::{SplitWhitespace, FromStr};
+
+#[snippet = "template"]
+pub struct Scanner<'a> {
+    pub iter: SplitWhitespace<'a>,
 }
 
 #[snippet = "template"]
-pub mod io {
-    use std::str::{SplitWhitespace, FromStr};
-
-    pub struct Scanner<'a> {
-        iter: SplitWhitespace<'a>,
+impl<'a> Scanner<'a> {
+    pub fn new(s: &'a str) -> Scanner<'a> {
+        Scanner {
+            iter: s.split_whitespace(),
+        }
     }
 
-    impl<'a> Scanner<'a> {
-        pub fn new(s: &'a str) -> Scanner<'a> {
-            Scanner {
-                iter: s.split_whitespace(),
-            }
-        }
+    pub fn read<T: FromStr>(&mut self) -> T {
+        self.iter
+            .next() .unwrap()
+            .parse()
+            .ok()
+            .expect("parsing failed")
+    }
 
-        pub fn read<T: FromStr>(&mut self) -> T {
-            self.iter
-                .next() .unwrap()
-                .parse()
-                .ok()
-                .expect("parsing failed")
-        }
-
-        pub fn read_vec<T: FromStr>(&mut self, n: usize) -> Vec<T> {
-            (0..n).map(|_| self.read()).collect()
-        }
+    pub fn read_vec<T: FromStr>(&mut self, n: usize) -> Vec<T> {
+        (0..n).map(|_| self.read()).collect()
     }
 }
