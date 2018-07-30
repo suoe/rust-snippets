@@ -41,18 +41,18 @@ impl UnionFind {
 #[cfg(test)]
 mod test {
     use super::*;
-    use template::Scanner;
+    use util::TestCase;
     use util;
 
     #[test]
     fn dsl_1_a() {
         let s = util::read_from_directory("./testcases/DSL_1_A/in");
-        let mut cin = Scanner::new(&s);
+        let mut cin = TestCase::new(&s);
         let s = util::read_from_directory("./testcases/DSL_1_A/out");
-        let mut cout = Scanner::new(&s);
+        let mut cout = TestCase::new(&s);
 
-        while let Some(n) = cin.iter.next() {
-            let n: usize = n.parse().ok().expect("parsing failed");
+        while !cin.is_empty() {
+            let n: usize = cin.read();
             let q: usize = cin.read();
             let queries: Vec<(usize, usize, usize)> =
                 (0..q).map(|_| (cin.read(), cin.read(), cin.read())).collect();
