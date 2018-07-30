@@ -31,8 +31,10 @@ impl UnionFind {
         }
         if self.size[x] > self.size[y] {
             self.par[y] = x;
+            self.size[x] += self.size[y];
         } else {
             self.par[x] = y;
+            self.size[y] += self.size[x];
         }
         true
     }
