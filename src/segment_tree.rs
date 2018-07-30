@@ -49,3 +49,49 @@ impl<M: Monoid> SegmentTree<M> {
         }
     }
 }
+
+#[cfg(test)]
+mod test {
+    use std;
+    use super::*;
+    use util::TestCase;
+    use util;
+
+    // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_A
+    #[test]
+    fn dsl_2_a() {
+        let s = util::read_from_directory("./testcases/DSL_2_A/in");
+        let mut cin = TestCase::new(&s);
+        let s = util::read_from_directory("./testcases/DSL_2_A/out");
+        let mut cout = TestCase::new(&s);
+
+        type Min = usize;
+
+        impl Monoid for Min {
+            fn mempty() -> Min {
+                2147483647 // 2^31 - 1
+            }
+
+            fn mappend(a: Min, b: Min) -> Min {
+                std::cmp::min(a, b)
+            }
+        }
+
+        while !cin.is_empty() {
+            let n: usize = cin.read();
+            let q: usize = cin.read();
+            let mut seg = SegmentTree::<Min>::new(n);
+            for i in 0..q {
+                let com: usize = cin.read();
+                let x: usize = cin.read();
+                let y: usize = cin.read();
+                if com == 0 {
+                    seg.update(x, y);
+                } else {
+                    let res = seg.query(x, y + 1);
+                    assert_eq!(res, cout.read::<usize>())
+                }
+            }
+        }
+    }
+}
