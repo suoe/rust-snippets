@@ -52,10 +52,10 @@ impl<M: Monoid> SegmentTree<M> {
 
 #[cfg(test)]
 mod test {
-    use std;
     use super::*;
-    use util::TestCase;
+    use std;
     use util;
+    use util::TestCase;
 
     // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_2_A
     #[test]
@@ -81,15 +81,15 @@ mod test {
             let n: usize = cin.read();
             let q: usize = cin.read();
             let mut seg = SegmentTree::<Min>::new(n);
-            for i in 0..q {
-                let com: usize = cin.read();
-                let x: usize = cin.read();
-                let y: usize = cin.read();
-                if com == 0 {
-                    seg.update(x, y);
+            let queries: Vec<(usize, usize, usize)> = (0..q)
+                .map(|_| (cin.read(), cin.read(), cin.read()))
+                .collect();
+            for query in queries {
+                if query.0 == 0 {
+                    seg.update(query.1, query.2);
                 } else {
-                    let res = seg.query(x, y + 1);
-                    assert_eq!(res, cout.read::<usize>())
+                    let res = seg.query(query.1, query.2 + 1);
+                    assert_eq!(res, cout.read());
                 }
             }
         }

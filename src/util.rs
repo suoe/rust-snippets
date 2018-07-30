@@ -31,6 +31,7 @@ pub fn read_from_directory(path: &str) -> String {
         .join("\n")
 }
 
+// Scanner with is_empty
 pub struct TestCase<'a> {
     iter: std::iter::Peekable<std::str::SplitWhitespace<'a>>,
 }
@@ -58,7 +59,7 @@ impl<'a> TestCase<'a> {
     pub fn is_empty(&mut self) -> bool {
         match self.iter.peek() {
             Some(_) => false,
-            None    => true,
+            None => true,
         }
     }
 }

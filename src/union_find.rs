@@ -43,8 +43,8 @@ impl UnionFind {
 #[cfg(test)]
 mod test {
     use super::*;
-    use util::TestCase;
     use util;
+    use util::TestCase;
 
     // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A
     #[test]
@@ -57,15 +57,20 @@ mod test {
         while !cin.is_empty() {
             let n: usize = cin.read();
             let q: usize = cin.read();
-            let queries: Vec<(usize, usize, usize)> =
-                (0..q).map(|_| (cin.read(), cin.read(), cin.read())).collect();
+            let queries: Vec<(usize, usize, usize)> = (0..q)
+                .map(|_| (cin.read(), cin.read(), cin.read()))
+                .collect();
             let mut uf = UnionFind::new(n);
 
             for query in queries {
                 if query.0 == 0 {
                     uf.merge(query.1, query.2);
                 } else {
-                    let res = if uf.root(query.1) == uf.root(query.2) {1} else {0};
+                    let res = if uf.root(query.1) == uf.root(query.2) {
+                        1
+                    } else {
+                        0
+                    };
                     assert_eq!(res, cout.read())
                 }
             }
