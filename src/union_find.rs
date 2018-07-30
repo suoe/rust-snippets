@@ -46,6 +46,7 @@ mod test {
     use util::TestCase;
     use util;
 
+    // http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A
     #[test]
     fn dsl_1_a() {
         let s = util::read_from_directory("./testcases/DSL_1_A/in");
