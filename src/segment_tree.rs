@@ -1,7 +1,10 @@
 #[snippet = "segment_tree"]
 pub trait Monoid: Copy {
-    fn mempty() -> Self;
-    fn mappend(a: Self, b: Self) -> Self;
+    fn id() -> Self;
+    fn op(a: Self, b: Self) -> Self;
+    // Monoid must satisfy following laws:
+    // op(a, id()) == op(id(), a) == a
+    // op(a, op(b, c)) == op(op(a, b), c)
 }
 
 #[snippet = "segment_tree"]
@@ -20,7 +23,7 @@ impl<M: Monoid> SegmentTree<M> {
 
         SegmentTree {
             n: m,
-            data: vec![M::mempty(); 2 * m],
+            data: vec![M::id(); 2 * m],
         }
     }
 
@@ -29,7 +32,7 @@ impl<M: Monoid> SegmentTree<M> {
         self.data[k] = a;
         while k > 0 {
             k = (k - 1) / 2;
-            self.data[k] = M::mappend(self.data[k * 2 + 1], self.data[k * 2 + 2]);
+            self.data[k] = M::op(self.data[k * 2 + 1], self.data[k * 2 + 2]);
         }
     }
 
@@ -37,15 +40,15 @@ impl<M: Monoid> SegmentTree<M> {
         self.query_range(l, r, 0, 0, self.n)
     }
 
-    pub fn query_range(&self, a: usize, b: usize, k: usize, l: usize, r: usize) -> M {
+    fn query_range(&self, a: usize, b: usize, k: usize, l: usize, r: usize) -> M {
         if r <= a || b <= l {
-            M::mempty()
+            M::id()
         } else if a <= l && r <= b {
             self.data[k]
         } else {
             let vl = self.query_range(a, b, k * 2 + 1, l, (l + r) / 2);
             let vr = self.query_range(a, b, k * 2 + 2, (l + r) / 2, r);
-            M::mappend(vl, vr)
+            M::op(vl, vr)
         }
     }
 }
@@ -68,11 +71,11 @@ mod test {
         type Min = usize;
 
         impl Monoid for Min {
-            fn mempty() -> Min {
+            fn id() -> Min {
                 2147483647 // 2^31 - 1
             }
 
-            fn mappend(a: Min, b: Min) -> Min {
+            fn op(a: Min, b: Min) -> Min {
                 std::cmp::min(a, b)
             }
         }
