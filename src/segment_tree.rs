@@ -1,3 +1,5 @@
+use std;
+
 #[snippet = "segment_tree"]
 pub trait Monoid: Copy {
     fn id() -> Self;
@@ -53,10 +55,23 @@ impl<M: Monoid> SegmentTree<M> {
     }
 }
 
+#[snippet = "min_monoid"]
+type Min = usize;
+impl Monoid for Min {
+    #[inline]
+    fn id() -> Min {
+        2147483647
+    }
+
+    #[inline]
+    fn op(a: Min, b: Min) -> Min {
+        std::cmp::min(a, b)
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
-    use std;
     use util;
     use util::TestCase;
 
@@ -67,20 +82,6 @@ mod test {
         let mut cin = TestCase::new(&s);
         let s = util::read_from_directory("./testcases/DSL_2_A/out");
         let mut cout = TestCase::new(&s);
-
-        type Min = usize;
-
-        impl Monoid for Min {
-            #[inline]
-            fn id() -> Min {
-                2147483647 // 2^31 - 1
-            }
-
-            #[inline]
-            fn op(a: Min, b: Min) -> Min {
-                std::cmp::min(a, b)
-            }
-        }
 
         while !cin.is_empty() {
             let n: usize = cin.read();

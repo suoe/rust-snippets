@@ -1,3 +1,5 @@
+use binary_search;
+
 #[snippet = "fenwick_tree"]
 pub trait Abel: Copy {
     fn id() -> Self;
@@ -50,6 +52,49 @@ impl<A: Abel> FenwickTree<A> {
     }
 }
 
+#[snippet = "sum_abel"]
+type Sum = isize;
+impl Abel for Sum {
+    #[inline]
+    fn id() -> Sum {
+        0
+    }
+    #[inline]
+    fn op(a: Sum, b: Sum) -> Sum {
+        a + b
+    }
+    #[inline]
+    fn inv(a: Sum) -> Sum {
+        -a
+    }
+}
+
+#[snippet = "binary_search_on_fenwick_tree"]
+#[snippet(include = "binary_search")]
+#[snippet(include = "fenwick_tree")]
+impl<A: Abel + Ord> binary_search::LowerBound<A> for FenwickTree<A> {
+    fn lower_bound(&self, w: &A) -> Option<usize> {
+        let mut w = *w;
+        let mut x = 0;
+        let mut k = 1;
+        while k * 2 <= self.n {
+            k *= 2;
+        }
+        while k > 0 {
+            if x + k <= self.n && self.data[x + k] < w {
+                w = A::op(w, A::inv(self.data[x + k]));
+                x += k;
+            }
+            k /= 2;
+        }
+        if x == self.n {
+            None
+        } else {
+            Some(x + 1)
+        }
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -63,25 +108,6 @@ mod test {
         let mut cin = TestCase::new(&s);
         let s = util::read_from_directory("./testcases/DSL_2_B/out");
         let mut cout = TestCase::new(&s);
-
-        type Sum = isize;
-
-        impl Abel for Sum {
-            #[inline]
-            fn id() -> Sum {
-                0
-            }
-
-            #[inline]
-            fn op(a: Sum, b: Sum) -> Sum {
-                a + b
-            }
-
-            #[inline]
-            fn inv(a: Sum) -> Sum {
-                -a
-            }
-        }
 
         while !cin.is_empty() {
             let n: usize = cin.read();

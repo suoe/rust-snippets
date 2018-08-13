@@ -121,6 +121,8 @@ mod test {
                     let count = m - n;
                     assert_eq!(count, count_element(i));
                 }
+            } else {
+                assert!(count_element(i) == 0);
             }
         }
     }
