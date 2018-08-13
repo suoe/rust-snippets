@@ -5,3 +5,4 @@ authors = ["sunao <sunaok.suoe@gmail.com>"]
 
 [dependencies]
 cargo-snippet = "0.2"
+rand = "0.5"
