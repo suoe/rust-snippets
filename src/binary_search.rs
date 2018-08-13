@@ -85,12 +85,10 @@ mod test {
     #[test]
     fn bin_search_on_slice() {
         let mut rng = rand::thread_rng();
-        let mut numbers: Vec<usize> = (0..10000).map(|_| {
-            rng.gen_range(1, 21)
-        }).collect();
+        let mut numbers: Vec<usize> = (0..10000).map(|_| rng.gen_range(1, 21)).collect();
         numbers.sort();
 
-        let count_element = | x | {
+        let count_element = |x| {
             let mut table: Vec<Option<usize>> = vec![None; 21];
             if let Some(n) = table[x] {
                 return n;
