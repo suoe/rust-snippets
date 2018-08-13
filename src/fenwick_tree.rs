@@ -1,8 +1,8 @@
 #[snippet = "fenwick_tree"]
 pub trait Abel: Copy {
     fn id() -> Self;
-    fn op(Self, Self) -> Self;
-    fn inv(Self) -> Self;
+    fn op(a: Self, b: Self) -> Self;
+    fn inv(a: Self) -> Self;
     // Abelian Group must satisfy following laws:
     // op(id(), a) == op(a, id()) == a
     // op(a, op(b, c)) == op(op(a, b), c)
@@ -38,6 +38,7 @@ impl<A: Abel> FenwickTree<A> {
         A::op(self.sum_from_one(r), A::inv(self.sum_from_one(l)))
     }
 
+    // [1, k)
     fn sum_from_one(&mut self, k: usize) -> A {
         let mut s = A::id();
         let mut k = k - 1;
@@ -66,14 +67,17 @@ mod test {
         type Sum = isize;
 
         impl Abel for Sum {
+            #[inline]
             fn id() -> Sum {
                 0
             }
 
+            #[inline]
             fn op(a: Sum, b: Sum) -> Sum {
                 a + b
             }
 
+            #[inline]
             fn inv(a: Sum) -> Sum {
                 -a
             }

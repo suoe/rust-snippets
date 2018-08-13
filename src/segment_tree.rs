@@ -71,10 +71,12 @@ mod test {
         type Min = usize;
 
         impl Monoid for Min {
+            #[inline]
             fn id() -> Min {
                 2147483647 // 2^31 - 1
             }
 
+            #[inline]
             fn op(a: Min, b: Min) -> Min {
                 std::cmp::min(a, b)
             }
