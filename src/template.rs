@@ -12,7 +12,7 @@ mod io {
     use std::str::{FromStr, SplitWhitespace};
 
     pub struct Scanner<'a> {
-        pub iter: SplitWhitespace<'a>,
+        iter: SplitWhitespace<'a>,
     }
 
     impl<'a> Scanner<'a> {
